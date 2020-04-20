@@ -7,15 +7,18 @@ import java.util.Map;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -48,6 +51,8 @@ public class Main extends Application {
 	public static int yGoal = 9;
 	public static List<Point2D> grid = new ArrayList<>();
 	AnimationTimer gameLoop;
+	public static List<Point2D> path = new ArrayList<>();
+	public static Point2D location = new Point2D(0,0);
 	
 	
 	@Override
@@ -74,10 +79,11 @@ public class Main extends Application {
 			root.add(p.getGraphic(), xLocation, yLocation);
 			
 			
-			Point2D location = new Point2D(xLocation, yLocation);
+			location = new Point2D(xLocation, yLocation);
 			
 			Player goal = new Player(xGoal,yGoal,graphicSize,Color.RED);
 			root.add(goal.getGraphic(), 9, 9);
+			
 			
 			
 			Scene scene = new Scene(root,WINDOWWIDTH,WINDOWHEIGHT);
@@ -86,7 +92,7 @@ public class Main extends Application {
 			root.requestFocus();
 			
 			
-			Point2D goal2 = new Point2D(xGoal, yGoal);
+			
 			List<List<Point2D>> adjacencyList = new ArrayList<>();
 			for(Point2D point: grid) {
 				double x = point.getX();
@@ -108,36 +114,42 @@ public class Main extends Application {
 				adjacencyList.add(neighbors);
 			}
 			
-			int pathPoint=0;
-					Map<Point2D,Point2D> cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
-					List<Point2D> path = breadthSearch.returnPath(location, goal2, cameFrom);
-					//System.out.printf("%s%n", path.toString());
-					EventHandler<ActionEvent> handler = new EventHandler<ActionEvent>() {
 
-						@Override
-						public void handle(ActionEvent event) {
-							// TODO Auto-generated method stub
-							if(path.size()>0) {
-								Point2D current = path.get(0);
-								path.remove(0);
-								double x = current.getX();
-								double y = current.getY();
-								p.move((int) x,(int) y, root);
-								System.out.printf("point: %d %f %f%n",path.size(), x,y);
-							}
-						}
-						
-					};
-					Timeline tl = new Timeline(new KeyFrame(Duration.millis(1000),handler));
-					tl.setCycleCount(Timeline.INDEFINITE);
-					tl.play();
+			int pathPoint=0;
+			
+			EventHandler<ActionEvent> handler = new EventHandler<ActionEvent>() {
+				
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+					if(path.size()>0) {
+						Point2D current = path.get(0);
+						path.remove(0);
+						double x = current.getX();
+						double y = current.getY();
+						p.move((int) x,(int) y, root);
+						System.out.printf("point: %d %f %f%n",path.size(), x,y);
+						grid.remove(current);
+					}
+				}
+				
+			};
+			Timeline tl = new Timeline(new KeyFrame(Duration.millis(1000),handler));
+			tl.setCycleCount(Timeline.INDEFINITE);
+			tl.play();
 				
 				
 //			setting up keyboard interaction
 		root.setOnKeyPressed(
 					(e)->{
+						int i = 0;
 						int x=goal.getX();
 						int y=goal.getY();
+						int playerX =  goal.getX();
+						int playerY = goal.getY();
+						Point2D goal2 = new Point2D((double) playerX,(double) playerY);
+						Map<Point2D,Point2D> cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
+						path = breadthSearch.returnPath(location, goal2, cameFrom);
 						//moves the player piece based on key input
 						//the val variable and the if statement
 						//ensure that you don't move past the edge
@@ -145,24 +157,50 @@ public class Main extends Application {
 						if(e.getCode()==KeyCode.UP) {
 							int val=y-1;
 							if(val<0) val=0;
-							goal.move(x,val,root);
-							
+							goal.move(x,val,root);	
+							playerX =  goal.getX();
+							playerY = goal.getY();
+							goal2 = new Point2D((double) playerX,(double) playerY);
+							cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
+							path = breadthSearch.returnPath(location, goal2, cameFrom);
+							grid.remove(i);
+							location = path.get(i);
 						}
 						if(e.getCode()==KeyCode.DOWN) {
 							int val=y+1;
 							if(val>GRIDHEIGHT-1) val=GRIDHEIGHT-1;
 							goal.move(x,val,root);
+							playerX =  goal.getX();
+							playerY = goal.getY();
+							goal2 = new Point2D((double) playerX,(double) playerY);
+							cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
+							path = breadthSearch.returnPath(location, goal2, cameFrom);
+							grid.remove(i);
+							location = path.get(i);
 							
 						}
 						if(e.getCode()==KeyCode.LEFT) {
 							int val=x-1;
 							if(val<0) val=0;
 							goal.move(val,y,root);
+							playerX =  goal.getX();
+							playerY = goal.getY();
+							goal2 = new Point2D((double) playerX,(double) playerY);
+							cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
+							path = breadthSearch.returnPath(location, goal2, cameFrom);
+							grid.remove(i);
+							location = path.get(i);
 						}
 						if(e.getCode()==KeyCode.RIGHT) {
 							int val=x+1;
 							if(val>GRIDWIDTH-1) val=GRIDWIDTH-1;
 							goal.move(val,y,root);
+							playerX =  goal.getX();
+							playerY = goal.getY();
+							goal2 = new Point2D((double) playerX,(double) playerY);
+							cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
+							path = breadthSearch.returnPath(location, goal2, cameFrom);
+							location = path.get(i);
 						}
 					}
 				);
