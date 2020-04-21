@@ -22,21 +22,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
 
 /**
  * Program to demonstrate GridPane usage.
- * Rather than use best practices and error
- * checking, I've opted to keep the code as
- * readable as possible.
  * 
- * You move the red square with the arrow keys.
- * The exact positioning of the "player" square
- * is not correct, as can be seen from the strokes
- * on the squares that make up the grid. To correct
- * this, you'd have to play with the relative x and y
- * of the player square.
- * 
- * @author schuster
  */
 public class Main extends Application {
 	
@@ -53,6 +43,7 @@ public class Main extends Application {
 	AnimationTimer gameLoop;
 	public static List<Point2D> path = new ArrayList<>();
 	public static Point2D location = new Point2D(0,0);
+	public int direction = 30;
 	
 	
 	@Override
@@ -75,13 +66,13 @@ public class Main extends Application {
 			}
 			
 			//create player object and add player to gridpane
-			Player p = new Player(xLocation,yLocation,graphicSize,Color.BLUE);
+			Player p = new Player(xLocation,yLocation,15, 15, direction, 360, Color.RED);     
 			root.add(p.getGraphic(), xLocation, yLocation);
 			
 			
 			location = new Point2D(xLocation, yLocation);
 			
-			Player goal = new Player(xGoal,yGoal,graphicSize,Color.RED);
+			Player goal = new Player(xGoal,yGoal,15, 15, direction, 270, Color.YELLOW);
 			root.add(goal.getGraphic(), 9, 9);
 			
 			
@@ -113,9 +104,6 @@ public class Main extends Application {
 				}
 				adjacencyList.add(neighbors);
 			}
-			
-
-			int pathPoint=0;
 			
 			EventHandler<ActionEvent> handler = new EventHandler<ActionEvent>() {
 				
@@ -165,6 +153,7 @@ public class Main extends Application {
 							path = breadthSearch.returnPath(location, goal2, cameFrom);
 							grid.remove(i);
 							location = path.get(i);
+							direction = 130;
 						}
 						if(e.getCode()==KeyCode.DOWN) {
 							int val=y+1;
@@ -177,6 +166,7 @@ public class Main extends Application {
 							path = breadthSearch.returnPath(location, goal2, cameFrom);
 							grid.remove(i);
 							location = path.get(i);
+							direction = 0;
 							
 						}
 						if(e.getCode()==KeyCode.LEFT) {
@@ -190,6 +180,7 @@ public class Main extends Application {
 							path = breadthSearch.returnPath(location, goal2, cameFrom);
 							grid.remove(i);
 							location = path.get(i);
+							direction = 230;
 						}
 						if(e.getCode()==KeyCode.RIGHT) {
 							int val=x+1;
@@ -201,6 +192,7 @@ public class Main extends Application {
 							cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
 							path = breadthSearch.returnPath(location, goal2, cameFrom);
 							location = path.get(i);
+							direction = 30;
 						}
 					}
 				);
