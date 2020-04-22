@@ -1,75 +1,55 @@
 package application;
 
-import java.util.List;
-
-import javafx.geometry.Point2D;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 
 /**
- * Player element
- * Represented by a Red square that can move around the grid
- * @author schuster
+ * This allows the program to create a player
  */
 public class Player {
 	//x and y location data
-	//this is NOT connected to the GridPane
 	private int x;
 	private int y;
 	
 	//the player object knows about its graphic
-	private Rectangle graphic;
+	private Arc graphic;
 	
 	/**
-	 * Constructor, sets location and graphic
-	 * 
-	 * @param x    x-Location data for the element
-	 * @param y    y-Location data for the element
-	 * @param size Physical size of the graphic (Rectangle)
+	 * This constructor sets up the parameters needed to create an arc which is used
+	 * as the player character. It is also used for the ghost just that the arc is zero 
+	 * so it is a circle.
 	 */
-	Player(int x, int y, int size, Color c){
+	Player(int x, int y, int width, int height,int startAngle, int angleLength,  Color c){
 		this.x=x;
 		this.y=y;
-		graphic=new Rectangle(size,size);
+		graphic=new Arc(x,y,width,height,startAngle,angleLength);
 		graphic.setFill(c);
+		graphic.setType(ArcType.ROUND);
 	}
 	
 	/**
-	 * Method that moves the player to a new x,y location
-	 * in the GridPane p.
-	 * 
-	 * This method is not safe, if the passed in GridPane
-	 * does not contain the player, the program will crash.
-	 * It may be better to include a reference to the GridPane
-	 * as part of the class data.
-	 * 
-	 * @param x New x-location
-	 * @param y New y-location
-	 * @param p The GridPane that this player belongs to
+	 * This method allows for the movement of the player it will get the new x
+	 * and y from the input and move the player to that location
 	 */
 	public void move(int x, int y, GridPane p) {
-		//update the Player class data
 		this.x=x;
 		this.y=y;
-		//remove the player graphic from the grid
+		//removes the player graphic from the grid
 		p.getChildren().remove(graphic);
-		//add the player graphic to the grid in
-		//its new location
-		p.add(graphic, x, y); //THIS is now we connect to the GridPane
+		p.add(graphic, x, y); 
 	}
 	
 	/**
 	 * Getter of the element graphic
-	 * @return Rectangle graphic (for adding to the pane)
 	 */
-	public Rectangle getGraphic() {
+	public Arc getGraphic() {
 		return graphic;
 	}
 	
 	/**
 	 * Getter for the x coordinate
-	 * @return x-location
 	 */
 	public int getX() {
 		return x;
@@ -77,7 +57,6 @@ public class Player {
 	
 	/**
 	 * Getter for the y coordinate
-	 * @return y-location
 	 */
 	public int getY() {
 		return y;

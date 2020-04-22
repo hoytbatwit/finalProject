@@ -3,29 +3,24 @@ package application;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import application.map.AllExit;
 import application.map.AllOrbs;
 import application.map.AllRec;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
+
 
 /**
  *This is the main code of our project it is where all of the 
@@ -40,10 +35,10 @@ public class Main extends Application {
 	public final static int GRIDWIDTH=10;
 	public final static int WINDOWHEIGHT=1000;
 	public final static int WINDOWWIDTH=1800;
-	public static int xLocation = 0;
+	public static int xLocation = 1;
 	public static int yLocation = 0;
-	public static int xGoal = 9;
-	public static int yGoal = 9;
+	public static int xGoal = 7;
+	public static int yGoal = 4;
 	public static List<Point2D> grid = new ArrayList<>();
 	AnimationTimer gameLoop;
 	public static List<Point2D> path = new ArrayList<>();
@@ -54,6 +49,10 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			/*
+			 * This code is used to put a map in the background.
+			 * This allows there to be two panes in the scene just one on top of each other.
+			 */
 			Pane root2 = new Pane();
 			root2.setStyle("-fx-background-color: black");
 			AllOrbs Orbs = new AllOrbs(root2);
@@ -178,9 +177,12 @@ public class Main extends Application {
 						int y=goal.getY();
 						int playerX = goal.getX();
 						int playerY = goal.getY();
+						int x2 = p.getX();
+						int y2 = p.getY();
+						Point2D location2 = new Point2D((double) x2, (double) y2);
 						Point2D goal2 = new Point2D((double) playerX,(double) playerY);
-						Map<Point2D,Point2D> cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
-						path = breadthSearch.returnPath(location, goal2, cameFrom);
+						Map<Point2D,Point2D> cameFrom = breadthSearch.getPath(adjacencyList, location2, goal2, grid);
+						path = breadthSearch.returnPath(location2, goal2, cameFrom);
 						if(e.getCode()==KeyCode.UP) {
 							int val=y-1;
 							if(val<0) val=0;
@@ -188,8 +190,8 @@ public class Main extends Application {
 							playerX =  goal.getX();
 							playerY = goal.getY();
 							goal2 = new Point2D((double) playerX,(double) playerY);
-							cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
-							path = breadthSearch.returnPath(location, goal2, cameFrom);
+							cameFrom = breadthSearch.getPath(adjacencyList, location2, goal2, grid);
+							path = breadthSearch.returnPath(location2, goal2, cameFrom);
 							grid.remove(i);
 							location = path.get(i);
 							direction = 130;
@@ -201,8 +203,8 @@ public class Main extends Application {
 							playerX =  goal.getX();
 							playerY = goal.getY();
 							goal2 = new Point2D((double) playerX,(double) playerY);
-							cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
-							path = breadthSearch.returnPath(location, goal2, cameFrom);
+							cameFrom = breadthSearch.getPath(adjacencyList, location2, goal2, grid);
+							path = breadthSearch.returnPath(location2, goal2, cameFrom);
 							grid.remove(i);
 							location = path.get(i);
 							direction = 0;
@@ -215,8 +217,8 @@ public class Main extends Application {
 							playerX =  goal.getX();
 							playerY = goal.getY();
 							goal2 = new Point2D((double) playerX,(double) playerY);
-							cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
-							path = breadthSearch.returnPath(location, goal2, cameFrom);
+							cameFrom = breadthSearch.getPath(adjacencyList, location2, goal2, grid);
+							path = breadthSearch.returnPath(location2, goal2, cameFrom);
 							grid.remove(i);
 							location = path.get(i);
 							direction = 230;
@@ -228,9 +230,10 @@ public class Main extends Application {
 							playerX =  goal.getX();
 							playerY = goal.getY();
 							goal2 = new Point2D((double) playerX,(double) playerY);
-							cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
-							path = breadthSearch.returnPath(location, goal2, cameFrom);
+							cameFrom = breadthSearch.getPath(adjacencyList, location2, goal2, grid);
+							path = breadthSearch.returnPath(location2, goal2, cameFrom);
 							location = path.get(i);
+							grid.remove(i);
 							direction = 30;
 						}
 					}

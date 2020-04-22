@@ -22,14 +22,6 @@ public class breadthSearch{
 			if(current.equals(dest)) {
 				break;
 			}else {
-//				int index = 0;
-//				int test = adjacencyList.size();
-//				int i = 0;
-//				while(i<test) {
-//					if(adjacencyList.get(i) == current) {
-//						index = i;
-//					}
-//				}
 				double currentX = current.getX();
 				double currentY = current.getY();
 				int index = ((int) currentX * 10) + (int) currentY;
@@ -55,4 +47,5 @@ public class breadthSearch{
 		return path;
 	}
 }
+
 
