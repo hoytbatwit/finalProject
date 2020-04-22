@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import application.map.AllExit;
+import application.map.AllOrbs;
+import application.map.AllRec;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -21,20 +24,23 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 
 /**
- * Program to demonstrate GridPane usage.
- * 
+ *This is the main code of our project it is where all of the 
+ *code comes together. First a grid pane is generated and 
+ * then players are added to the pane and all of the accessory
+ * class are called bellow that.
  */
 public class Main extends Application {
 	
-	//Variables to determine gird and window size
+	//global variables for use in the code
 	public final static int GRIDHEIGHT=10;
 	public final static int GRIDWIDTH=10;
-	public final static int WINDOWHEIGHT=500;
-	public final static int WINDOWWIDTH=500;
+	public final static int WINDOWHEIGHT=1000;
+	public final static int WINDOWWIDTH=1800;
 	public static int xLocation = 0;
 	public static int yLocation = 0;
 	public static int xGoal = 9;
@@ -49,14 +55,35 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			Pane root2 = new Pane();
+			root2.setStyle("-fx-background-color: black");
+			AllOrbs Orbs = new AllOrbs(root2);
+			AllExit Border = new AllExit(root2);
+			AllRec Rec = new AllRec(root2);
+			AllRec SmallRec = new AllRec(root2);
+			AllRec TinyRec = new AllRec(root2);
+			AllExit Exit = new AllExit(root2);
+			AllExit SmallExit = new AllExit(root2);
+			AllExit ShortBorder = new AllExit(root2);
+			AllRec MediumRec = new AllRec(root2);
+			AllRec TopMediumRec = new AllRec(root2);
+			AllRec CenterRec = new AllRec(root2);
+			AllRec SkinnyHRec = new AllRec(root2);
+			AllRec OutsideMiddleRec = new AllRec(root2);
+			AllRec InsideMidRec = new AllRec(root2);
+			AllRec VMiddleRec = new AllRec(root2);
+			AllRec HMiddleRec = new AllRec(root2);
+			AllRec MicroMiddleRec = new AllRec(root2);
+			AllRec SideMicroMiddleRec = new AllRec(root2);
+			AllRec SideMMRec = new AllRec(root2);
+			AllRec HalfHMidleRec = new AllRec(root2);
+			AllRec BottomLRRec = new AllRec(root2);
 			GridPane root = new GridPane();
 			
-			//This assumes square window and graphic!
-			//Stroke size must be subtracted...
-			int graphicSize=WINDOWHEIGHT/GRIDHEIGHT - 3;
+			//This finds the size of each node
+			int graphicSize=10;
 			
-			//create all of the grid location and
-			//add them to the GridPane;
+			//This creates all of the nodes and adds them to an array list which is used later in the code
 			for(int i=0;i<GRIDHEIGHT;i++) {
 				for (int j=0;j<GRIDWIDTH;j++) {
 					root.add(new GridElement(i,j,graphicSize).getGraphic(), i, j);
@@ -65,30 +92,37 @@ public class Main extends Application {
 				}
 			}
 			
-			//create player object and add player to gridpane
+//			//creates the ghost and adds it to the pane
 			Player p = new Player(xLocation,yLocation,15, 15, direction, 360, Color.RED);     
 			root.add(p.getGraphic(), xLocation, yLocation);
 			
-			
+//			//This is a Point2D which is used in the search algoithm
 			location = new Point2D(xLocation, yLocation);
-			
-			Player goal = new Player(xGoal,yGoal,15, 15, direction, 270, Color.YELLOW);
-			root.add(goal.getGraphic(), 9, 9);
-			
-			
-			
+//			
+//			//Adds the pacman to the pane
+			Player goal = new Player(xGoal,yGoal,20, 20, direction, 270, Color.YELLOW);
+			root.add(goal.getGraphic(), xGoal, yGoal);
+//			
+//			
+//			//This code displays the whole scene with everything on it
 			Scene scene = new Scene(root,WINDOWWIDTH,WINDOWHEIGHT);
+			root.getChildren().addAll(root2);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			root.requestFocus();
-			
-			
-			
+//			
+//			
+			//This creates an adjacencyList which contains a point and a point that it is connected to
 			List<List<Point2D>> adjacencyList = new ArrayList<>();
 			for(Point2D point: grid) {
+				//first it finds the x and y of the point and creates a list that contains the neighbors
 				double x = point.getX();
 				double y = point.getY();
 				List<Point2D> neighbors = new ArrayList<>();
+				/*
+				 * These if statements check to make sure that the points that are created are inside
+				 * of the graph and if they are they are added to the neighbors list
+				 */
 				if(x - 1 > -1) {
 					neighbors.add(new Point2D(x - 1, y));
 					//System.out.printf("%s%n", new Point2D(x -1, y).toString());
@@ -105,8 +139,12 @@ public class Main extends Application {
 				adjacencyList.add(neighbors);
 			}
 			
+			/*
+			 * This event is used to update the position of the ghost
+			 * every second it updates the position of the ghost based on the 
+			 * path that was created.
+			 */
 			EventHandler<ActionEvent> handler = new EventHandler<ActionEvent>() {
-				
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
@@ -127,9 +165,15 @@ public class Main extends Application {
 			tl.play();
 				
 				
-//			setting up keyboard interaction
+			/*
+			 * This key event serves multiple purposes. The first thing that is updated is the position of the pacman. 
+			 * Based on which key was pressed the player will move in a different direction. Next the path is updated.
+			 * This allows the program to always know where the player is and allows there to always be an accurate 
+			 * path to the player.
+			 */
 		root.setOnKeyPressed(
 					(e)->{
+						//These variables are all needed and used in the updating of different things inside the key event
 						int i = 0;
 						int x=goal.getX();
 						int y=goal.getY();
@@ -138,10 +182,6 @@ public class Main extends Application {
 						Point2D goal2 = new Point2D((double) playerX,(double) playerY);
 						Map<Point2D,Point2D> cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
 						path = breadthSearch.returnPath(location, goal2, cameFrom);
-						//moves the player piece based on key input
-						//the val variable and the if statement
-						//ensure that you don't move past the edge
-						//of the grid.
 						if(e.getCode()==KeyCode.UP) {
 							int val=y-1;
 							if(val<0) val=0;
@@ -198,7 +238,7 @@ public class Main extends Application {
 				);
 			
 			//Standard JavaFX stuff to show the window.
-			
+//			
 		} catch(Exception e) {
 			e.printStackTrace();
 			System.exit(0);
