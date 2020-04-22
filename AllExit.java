@@ -1,4 +1,5 @@
-package application;
+
+package application.map;
 
 import java.util.ArrayList;
 
@@ -33,8 +34,8 @@ public class AllExit {
 		allShortBorder.add(new ShortBorder(1700, 128, p));
 		allShortBorder.add(new ShortBorder(1700, 531, p));
 		
-		allBorders.add(new Border(100, 120, p));
-		allBorders.add(new Border(100, 780, p));
+		allBorders.add(new Border(100, 100, p));
+		allBorders.add(new Border(100, 800, p));
 
 	}
 

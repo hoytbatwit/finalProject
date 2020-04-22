@@ -1,4 +1,4 @@
-package application;
+package application.map;
 
 
 import javafx.application.Application;

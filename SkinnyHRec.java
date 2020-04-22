@@ -1,4 +1,4 @@
-package application;
+package application.map;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -26,15 +26,3 @@ public class SkinnyHRec {
 		p.getChildren().add(graphic);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
