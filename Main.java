@@ -1,4 +1,3 @@
-
 package application;
 	
 import java.util.ArrayList;
@@ -39,8 +38,8 @@ public class Main extends Application {
 	//global variables for use in the code
 	public final static int GRIDHEIGHT=10;
 	public final static int GRIDWIDTH=10;
-	public final static int WINDOWHEIGHT=1000;
-	public final static int WINDOWWIDTH=1800;
+	public final static int WINDOWHEIGHT=500;
+	public final static int WINDOWWIDTH=500;
 	public static int xLocation = 0;
 	public static int yLocation = 0;
 	public static int xGoal = 9;
@@ -55,33 +54,33 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Pane root2 = new Pane();
-			root2.setStyle("-fx-background-color: black");
-			AllOrbs Orbs = new AllOrbs(root2);
-			AllExit Border = new AllExit(root2);
-			AllRec Rec = new AllRec(root2);
-			AllRec SmallRec = new AllRec(root2);
-			AllRec TinyRec = new AllRec(root2);
-			AllExit Exit = new AllExit(root2);
-			AllExit SmallExit = new AllExit(root2);
-			AllExit ShortBorder = new AllExit(root2);
-			AllRec MediumRec = new AllRec(root2);
-			AllRec TopMediumRec = new AllRec(root2);
-			AllRec CenterRec = new AllRec(root2);
-			AllRec SkinnyHRec = new AllRec(root2);
-			AllRec OutsideMiddleRec = new AllRec(root2);
-			AllRec InsideMidRec = new AllRec(root2);
-			AllRec VMiddleRec = new AllRec(root2);
-			AllRec HMiddleRec = new AllRec(root2);
-			AllRec MicroMiddleRec = new AllRec(root2);
-			AllRec SideMicroMiddleRec = new AllRec(root2);
-			AllRec SideMMRec = new AllRec(root2);
-			AllRec HalfHMidleRec = new AllRec(root2);
-			AllRec BottomLRRec = new AllRec(root2);
+//			Pane root2 = new Pane();
+//			root2.setStyle("-fx-background-color: black");
+//			AllOrbs Orbs = new AllOrbs(root2);
+//			AllExit Border = new AllExit(root2);
+//			AllRec Rec = new AllRec(root2);
+//			AllRec SmallRec = new AllRec(root2);
+//			AllRec TinyRec = new AllRec(root2);
+//			AllExit Exit = new AllExit(root2);
+//			AllExit SmallExit = new AllExit(root2);
+//			AllExit ShortBorder = new AllExit(root2);
+//			AllRec MediumRec = new AllRec(root2);
+//			AllRec TopMediumRec = new AllRec(root2);
+//			AllRec CenterRec = new AllRec(root2);
+//			AllRec SkinnyHRec = new AllRec(root2);
+//			AllRec OutsideMiddleRec = new AllRec(root2);
+//			AllRec InsideMidRec = new AllRec(root2);
+//			AllRec VMiddleRec = new AllRec(root2);
+//			AllRec HMiddleRec = new AllRec(root2);
+//			AllRec MicroMiddleRec = new AllRec(root2);
+//			AllRec SideMicroMiddleRec = new AllRec(root2);
+//			AllRec SideMMRec = new AllRec(root2);
+//			AllRec HalfHMidleRec = new AllRec(root2);
+//			AllRec BottomLRRec = new AllRec(root2);
 			GridPane root = new GridPane();
 			
 			//This finds the size of each node
-			int graphicSize=10;
+			int graphicSize=WINDOWHEIGHT/GRIDHEIGHT - 3;
 			
 			//This creates all of the nodes and adds them to an array list which is used later in the code
 			for(int i=0;i<GRIDHEIGHT;i++) {
@@ -106,7 +105,6 @@ public class Main extends Application {
 //			
 //			//This code displays the whole scene with everything on it
 			Scene scene = new Scene(root,WINDOWWIDTH,WINDOWHEIGHT);
-			root.getChildren().addAll(root2);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			root.requestFocus();
@@ -177,7 +175,7 @@ public class Main extends Application {
 						int i = 0;
 						int x=goal.getX();
 						int y=goal.getY();
-						int playerX =  goal.getX();
+						int playerX = goal.getX();
 						int playerY = goal.getY();
 						Point2D goal2 = new Point2D((double) playerX,(double) playerY);
 						Map<Point2D,Point2D> cameFrom = breadthSearch.getPath(adjacencyList, location, goal2, grid);
