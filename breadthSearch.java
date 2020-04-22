@@ -22,6 +22,14 @@ public class breadthSearch{
 			if(current.equals(dest)) {
 				break;
 			}else {
+//				int index = 0;
+//				int test = adjacencyList.size();
+//				int i = 0;
+//				while(i<test) {
+//					if(adjacencyList.get(i) == current) {
+//						index = i;
+//					}
+//				}
 				double currentX = current.getX();
 				double currentY = current.getY();
 				int index = ((int) currentX * 10) + (int) currentY;
@@ -33,24 +41,18 @@ public class breadthSearch{
 				}
 			}
 		}
-//		for(Point2D k : cameFrom.keySet()) {
-//			System.out.printf("%n%n");
-//			System.out.printf("%s: %s%n", k, cameFrom.get(k));
-//		}
 		return cameFrom;
 	}
 	
 	public static List<Point2D> returnPath(Point2D start, Point2D dest, Map<Point2D,Point2D> cameFrom){
 		List<Point2D> path = new ArrayList<>();
 		Point2D current = dest;
-		while(!current.equals(start)) {
+		while(!current.equals(start)) { 
 			path.add(current);
 			current = cameFrom.get(current);
 		}
-		path.add(start);
 		Collections.reverse(path);
 		return path;
 	}
 }
-
 
